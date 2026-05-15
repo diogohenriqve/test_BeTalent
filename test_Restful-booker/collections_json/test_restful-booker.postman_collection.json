@@ -1,0 +1,313 @@
+{
+  "info": {
+    "_postman_id": "277b9d9c-6075-40bd-afaf-1c4f5398aa75",
+    "name": "test_restful-booker",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53160575"
+  },
+  "item": [
+    {
+      "name": "LoginCorreto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1. Valida se logou com sucesso",
+              "pm.test(\"Status code é 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "// 2. Valida se retornou token",
+              "pm.test(\"Response contém token\", function () {",
+              "    const res = pm.response.json();",
+              "    pm.expect(res).to.have.property('token');",
+              "    pm.expect(res.token).to.be.a('string');",
+              "});",
+              "",
+              "// 3. Salva o token automaticamente pra usar depois",
+              "const jsonData = pm.response.json();",
+              "pm.environment.set(\"auth_token\", jsonData.token);",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "token={{auth_token}}",
+            "description": "Token",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"password123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "LoginIncorreto",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"username\": \"admin1\",\n    \"password\": \"password123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TodasReservasId",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/booking",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ReservaId",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/booking/158",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "158"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CriandoReserva",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"firstname\" : \"Diogo Henrique\",\n    \"lastname\" : \"Santana Jesus\",\n    \"totalprice\" : 222,\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2026-05-16\",\n        \"checkout\" : \"2026-05-17\"\n    },\n    \"additionalneeds\":\"Breakfast\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/booking",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UpdateReserva",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "token={{auth_token}}",
+            "description": "Token",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"firstname\": \"Diogo\",\n    \"lastname\": \"Santana\",\n    \"totalprice\": 222,\n    \"depositpaid\": true,\n    \"bookingdates\": {\n        \"checkin\": \"2026-08-16\",\n        \"checkout\": \"2026-08-28\"\n    },\n    \"additionalneeds\": \"Dinner\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/booking/2016",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "2016"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UpdateReservaSemToken",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"firstname\": \"Diogo\",\n    \"lastname\": \"Santana\",\n    \"totalprice\": 222,\n    \"depositpaid\": true,\n    \"bookingdates\": {\n        \"checkin\": \"2026-08-16\",\n        \"checkout\": \"2026-08-28\"\n    },\n    \"additionalneeds\": \"Dinner\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/booking/158",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "158"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "ExcluirReserva",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Cookie",
+            "value": "token={{auth_token}}",
+            "description": "Token",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/booking/857",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "booking",
+            "857"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
